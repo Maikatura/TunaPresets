@@ -18,7 +18,6 @@ const scaleBox = (scale) => {
 };
 
 
-
 // Fetch and update the Now Playing data with animation
 
 const slideOutCover = () => {
@@ -109,8 +108,9 @@ const updateNowPlayingData = () => {
 };
 
 
-// Call the function initially
+
 updateNowPlayingData();
+
 
 // Periodically update the Now Playing data every 5 seconds
 setInterval(updateNowPlayingData, 2000);
