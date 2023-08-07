@@ -4,6 +4,7 @@ let currentData = null;
 
 const urlParams = new URLSearchParams(window.location.search);
 
+const body = document.getElementsByTagName("BODY")[0]; 
 const coverImage = document.getElementById('coverImage');
 const title = document.getElementById('title');
 const artists = document.getElementById('artists');
@@ -12,7 +13,7 @@ const coverContainer = document.querySelector('.cover-container');
 const coverBackground = document.querySelector('.cover-background');
 
 const nowPlaying = document.querySelector('.now-playing');
-const updateDuration = 1000; // Duration for scaling transitions in milliseconds
+var updateDuration = 1000; // Duration for scaling transitions in milliseconds
 
 
  // Store the starting position
@@ -27,13 +28,21 @@ const scaleBox = (scale) => {
 	
 	const animationValue = urlParams.get('animation');
 	
-	if (animationValue === "UpAndDown")
+	if (animationValue === "UpThenDown")
 	{
-		  nowPlaying.style.transform = `translateY(${(1 - scale) * -150}%)`;
+		  nowPlaying.style.transform = `translateY(${(1 - scale) * -200}%)`;
 	}
-	else if (animationValue === "DownAndUp")
+	else if (animationValue === "DownThenUp")
 	{
-		  nowPlaying.style.transform = `translateY(${(1 - scale) * 150}%)`;
+		  nowPlaying.style.transform = `translateY(${(1 - scale) * 200}%)`;
+	}
+	else if (animationValue === "LeftThenRight")
+	{
+		  nowPlaying.style.transform = `translateX(${(1 - scale) * -200}%)`;
+	}
+	else if (animationValue === "RightThenLeft")
+	{
+		  nowPlaying.style.transform = `translateX(${(1 - scale) * 200}%)`;
 	}
 	else
 	{
@@ -133,6 +142,68 @@ const updateNowPlayingData = () => {
         });
 };
 
+const updatePosition = () => {
+	var position = urlParams.get('position');
+
+	if (position === "TopLeft")
+	{
+		body.style.justifyContent = `flex-end`;
+		body.style.alignItems = `flex-end`;
+	}
+	else if (position === "BottomLeft")
+	{
+		body.style.justifyContent = `flex-start`;
+		body.style.alignItems = `flex-end`;
+	}
+	else if (position === "CenterLeft")
+	{
+		body.style.justifyContent = `flex-start`;
+		body.style.alignItems = `center`;
+	}
+	else if (position === "TopRight")
+	{
+		body.style.justifyContent = `flex-end`;
+		body.style.alignItems = `flex-start`;
+	}
+	else if (position === "BottomRight")
+	{
+		body.style.justifyContent = `flex-end`;
+		body.style.alignItems = `flex-end`;
+	}
+	else if (position === "CenterRight")
+	{
+		body.style.justifyContent = `flex-end`;
+		body.style.alignItems = `center`;
+	}
+	else if (position === "TopCenter")
+	{
+		body.style.justifyContent = `center`;
+		body.style.alignItems = `flex-start`;
+	}
+	else if (position === "BottomCenter")
+	{
+		body.style.justifyContent = `center`;
+		body.style.alignItems = `flex-end`;
+	}
+	else if (position === "Center")
+	{
+		body.style.justifyContent = `center`;
+		body.style.alignItems = `center`;
+	}
+	
+	var durTime = urlParams.get('duration');
+	if (durTime === null)
+	{
+		updateDuration = 1000;
+	}
+	else
+	{
+		updateDuration = durTime;
+	}	
+	
+};
+
+updatePosition();
 updateNowPlayingData();
 
 // Periodically update the Now Playing data every 5 seconds

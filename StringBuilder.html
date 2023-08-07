@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Generator</title>
+</head>
+<body>
+    <h1>URL Generator</h1>
+    <form id="urlForm">
+	
+		<label for="baseURL">Style:</label>
+        <select id="baseURL" name="baseURL">
+			<option value="https://maikatura.github.io/TunaPresets/Default.html">Default</option>
+			<option value="https://maikatura.github.io/TunaPresets/Compact.html">Compact</option>
+
+			
+		</select>
+		<br><br>
+        <label for="position">Position:</label>
+        
+		<select id="position" name="position">
+			<option value="TopLeft">Top Left</option>
+			<option value="BottomLeft">Bottom Left</option>
+			<option value="CenterLeft">Center Left</option>
+			<option value="TopRight">Top Right</option>
+			<option value="BottomRight">Bottom Right</option>
+			<option value="CenterRight">Center Right</option>
+			<option value="TopCenter">Top Center</option>
+			<option value="BottomCenter">Bottom Center</option>
+			<option value="Center">Center</option>
+		</select>
+		<br><br>
+
+        <label for="animation">Animation:</label>
+		<select id="animation" name="animation">
+			<option value="">Default (Scale)</option>
+			<option value="UpThenDown">Up Then Down</option>
+			<option value="DownThenUp">Down Then Up</option>
+			<option value="LeftThenRight">Left Then Right</option>
+			<option value="RightThenLeft">Right Then Left</option>
+		</select>
+		<br><br>
+		
+        <label for="duration">Duration (ms):</label>
+        <input type="text" id="duration" name="duration" value="1000"><br><br>
+
+        <button type="button" id="generateButton">Generate URL</button>
+    </form>
+
+    <p>Generated URL:</p>
+    <p id="generatedURL"></p>
+
+    <script>
+        document.getElementById("generateButton").addEventListener("click", function() {
+			const baseURL = document.getElementById("baseURL").value;
+            const position = document.getElementById("position").value;
+            const animation = document.getElementById("animation").value;
+            const duration = document.getElementById("duration").value;
+
+            const queryParams = new URLSearchParams({
+                position: position,
+                animation: animation,
+                duration: duration
+            });
+
+            const finalURL = `${baseURL}?${queryParams.toString()}`;
+            document.getElementById("generatedURL").textContent = finalURL;
+        });
+    </script>
+</body>
+
+</html>
