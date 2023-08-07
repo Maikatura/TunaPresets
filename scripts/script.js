@@ -147,8 +147,8 @@ const updatePosition = () => {
 
 	if (position === "TopLeft")
 	{
-		body.style.justifyContent = `flex-end`;
-		body.style.alignItems = `flex-end`;
+		body.style.justifyContent = `flex-start`;
+		body.style.alignItems = `flex-start`;
 	}
 	else if (position === "BottomLeft")
 	{
