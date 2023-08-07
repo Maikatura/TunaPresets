@@ -12,9 +12,18 @@ const coverBackground = document.querySelector('.cover-background');
 const nowPlaying = document.querySelector('.now-playing');
 const updateDuration = 1000; // Duration for scaling transitions in milliseconds
 
+
+ // Store the starting position
+let startX = nowPlaying.getBoundingClientRect().left;
+let startY = nowPlaying.getBoundingClientRect().top;
+
+// Store the current offset
+let offsetX = 0;
+let offsetY = 0;
+
 const scaleBox = (scale) => {
     nowPlaying.style.transition = `transform ${updateDuration}ms ease-in-out`;
-    nowPlaying.style.transform = `scale(${scale})`;
+    nowPlaying.style.transform = `scale(${scale}) translateY(${scale * startY - startY}px)`;
 };
 
 
@@ -107,10 +116,7 @@ const updateNowPlayingData = () => {
         });
 };
 
-
-
 updateNowPlayingData();
 
-
 // Periodically update the Now Playing data every 5 seconds
-setInterval(updateNowPlayingData, 2000);
+setInterval(updateNowPlayingData, 4000);
