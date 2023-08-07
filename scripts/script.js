@@ -24,23 +24,23 @@ let startY = nowPlaying.getBoundingClientRect().top;
 let offsetX = 0;
 let offsetY = 0;
 
-const scaleBox = (scale) => {
+const PlayChangeAnimation = (scale) => {
 	
 	const animationValue = urlParams.get('animation');
 	
-	if (animationValue === "UpThenDown")
+	if (animationValue.toLowerCase() === "UpThenDown".toLowerCase())
 	{
 		  nowPlaying.style.transform = `translateY(${(1 - scale) * -200}%)`;
 	}
-	else if (animationValue === "DownThenUp")
+	else if (animationValue.toLowerCase() === "DownThenUp".toLowerCase())
 	{
 		  nowPlaying.style.transform = `translateY(${(1 - scale) * 200}%)`;
 	}
-	else if (animationValue === "LeftThenRight")
+	else if (animationValue.toLowerCase() === "LeftThenRight".toLowerCase())
 	{
 		  nowPlaying.style.transform = `translateX(${(1 - scale) * -200}%)`;
 	}
-	else if (animationValue === "RightThenLeft")
+	else if (animationValue.toLowerCase() === "RightThenLeft".toLowerCase())
 	{
 		  nowPlaying.style.transform = `translateX(${(1 - scale) * 200}%)`;
 	}
@@ -113,7 +113,7 @@ const updateNowPlayingDataWithAnimation = (data) => {
     isUpdateInProgress = true;
 
     // Scale the box to 0
-    scaleBox(0);
+    PlayChangeAnimation(0);
 
     // Wait for the scaling animation to finish
     setTimeout(() => {
@@ -121,7 +121,7 @@ const updateNowPlayingDataWithAnimation = (data) => {
         updateNowPlaying(data);
 
         // Scale the box back to 1
-        scaleBox(1);
+        PlayChangeAnimation(1);
 
         // Update the current data and reset the flag
         currentData = data;
@@ -145,47 +145,47 @@ const updateNowPlayingData = () => {
 const updatePosition = () => {
 	var position = urlParams.get('position');
 
-	if (position === "TopLeft")
+	if (position.toLowerCase() === "TopLeft".toLowerCase())
 	{
 		body.style.justifyContent = `flex-start`;
 		body.style.alignItems = `flex-start`;
 	}
-	else if (position === "BottomLeft")
+	else if (position.toLowerCase() === "BottomLeft".toLowerCase())
 	{
 		body.style.justifyContent = `flex-start`;
 		body.style.alignItems = `flex-end`;
 	}
-	else if (position === "CenterLeft")
+	else if (position.toLowerCase() === "CenterLeft".toLowerCase())
 	{
 		body.style.justifyContent = `flex-start`;
 		body.style.alignItems = `center`;
 	}
-	else if (position === "TopRight")
+	else if (position.toLowerCase() === "TopRight".toLowerCase())
 	{
 		body.style.justifyContent = `flex-end`;
 		body.style.alignItems = `flex-start`;
 	}
-	else if (position === "BottomRight")
+	else if (position.toLowerCase() === "BottomRight".toLowerCase())
 	{
 		body.style.justifyContent = `flex-end`;
 		body.style.alignItems = `flex-end`;
 	}
-	else if (position === "CenterRight")
+	else if (position.toLowerCase() === "CenterRight".toLowerCase())
 	{
 		body.style.justifyContent = `flex-end`;
 		body.style.alignItems = `center`;
 	}
-	else if (position === "TopCenter")
+	else if (position.toLowerCase() === "TopCenter".toLowerCase())
 	{
 		body.style.justifyContent = `center`;
 		body.style.alignItems = `flex-start`;
 	}
-	else if (position === "BottomCenter")
+	else if (position.toLowerCase() === "BottomCenter".toLowerCase())
 	{
 		body.style.justifyContent = `center`;
 		body.style.alignItems = `flex-end`;
 	}
-	else if (position === "Center")
+	else if (position.toLowerCase() === "Center".toLowerCase())
 	{
 		body.style.justifyContent = `center`;
 		body.style.alignItems = `center`;
