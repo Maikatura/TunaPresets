@@ -55,30 +55,41 @@ const PlayChangeAnimation = (scale) => {
 
 // Fetch and update the Now Playing data with animation
 
-const slideOutCover = () => {
-    coverImage.style.transform = 'translateX(-150%)';
-};
-
-const slideInCover = () => {
-    coverImage.style.transform = 'translateX(0)';
-};
-
 const updateNowPlaying = (data) => {
   
-    
-        // Update the cover and Now Playing information
-        coverImage.src = data.cover_path;
-        title.textContent = data.title;
-        artists.textContent = data.artists.join(', ');
-
-
-        // Slide the cover back into place
-        slideInCover();
-		updateCoverBackground(data.cover_path);
-
-        // Update the current data and reset the flag
-        currentData = data;
-   
+  
+	if (!data)
+	{
+		return;
+	}
+	
+	// Update the cover and Now Playing information
+	if (!data.cover_path)
+	{
+		return;
+	}
+	
+	if (!data.title)
+	{
+		return;
+	}
+	
+	if (!data.artists)
+	{
+		return;
+	}
+	
+	
+	coverImage.src = data.cover_path;
+	title.textContent = data.title;
+	artists.textContent = data.artists.join(', ');
+	
+	// Slide the cover back into place
+	updateCoverBackground(data.cover_path);
+	
+	// Update the current data and reset the flag
+	
+	
 
 };
 
@@ -89,10 +100,16 @@ const updateCoverBackground = (imageUrl) => {
 };
 
 const isSameData = (data1, data2) => {
-    if (!data1 || !data2) {
+    if (!data1 || !data2) 
+	{
         return false; // One of the objects is null, not the same
     }
-
+	
+	if (!data1.artists || !data2.artists) 
+	{
+        return false; // One of the objects is null, not the same
+    }
+	
     // Compare the properties of both objects
     return (
         JSON.stringify(data1.artists) === JSON.stringify(data2.artists) &&
@@ -106,10 +123,24 @@ const isSameData = (data1, data2) => {
 const updateNowPlayingDataWithAnimation = (data) => {
     if (isUpdateInProgress) return;
 
-    if (isSameData(data, currentData)) {
+    if (isSameData(data, currentData)) 
+	{
         // Data has not changed, no update needed
         return;
     }
+	else
+	{
+		currentData = data;
+	}
+		
+	
+	if (!currentData.artists) 
+	{
+        // No new data available, do not update or animate
+		PlayChangeAnimation(0);
+        return;
+    }
+	
     isUpdateInProgress = true;
 
     // Scale the box to 0
@@ -117,14 +148,17 @@ const updateNowPlayingDataWithAnimation = (data) => {
 
     // Wait for the scaling animation to finish
     setTimeout(() => {
-        // Update the cover background and Now Playing information
+       
+	  
         updateNowPlaying(data);
 
         // Scale the box back to 1
         PlayChangeAnimation(1);
 
         // Update the current data and reset the flag
-        currentData = data;
+		
+		
+		
         isUpdateInProgress = false;
     }, updateDuration);
 };
@@ -207,4 +241,4 @@ updatePosition();
 updateNowPlayingData();
 
 // Periodically update the Now Playing data every 5 seconds
-setInterval(updateNowPlayingData, 4000);
+setInterval(updateNowPlayingData, 1000);
