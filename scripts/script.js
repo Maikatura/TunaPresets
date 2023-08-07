@@ -2,6 +2,8 @@
 let isUpdateInProgress = false;
 let currentData = null;
 
+const urlParams = new URLSearchParams(window.location.search);
+
 const coverImage = document.getElementById('coverImage');
 const title = document.getElementById('title');
 const artists = document.getElementById('artists');
@@ -22,8 +24,23 @@ let offsetX = 0;
 let offsetY = 0;
 
 const scaleBox = (scale) => {
-    nowPlaying.style.transition = `transform ${updateDuration}ms ease-in-out`;
-    nowPlaying.style.transform = `scale(${scale}) translateY(${scale * startY - startY}px)`;
+	
+	const animationValue = urlParams.get('animation');
+	
+	if (animationValue === "UpAndDown")
+	{
+		  nowPlaying.style.transform = `translateY(${(1 - scale) * -150}%)`;
+	}
+	else if (animationValue === "DownAndUp")
+	{
+		  nowPlaying.style.transform = `translateY(${(1 - scale) * 150}%)`;
+	}
+	else
+	{
+		 nowPlaying.style.transform = `scale(${scale})`;
+	}
+	
+	nowPlaying.style.transition = `transform ${updateDuration}ms ease-in-out`;
 };
 
 
