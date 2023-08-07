@@ -15,7 +15,6 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-	max-width: 150px;
     max-width: 400px; /* Reduce max-width for a more compact layout */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Reduce box-shadow size */
     padding: 8px; /* Reduce padding */
