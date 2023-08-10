@@ -14,7 +14,7 @@ const coverBackground = document.querySelector('.cover-background');
 
 const nowPlaying = document.querySelector('.now-playing');
 var updateDuration = 1000; // Duration for scaling transitions in milliseconds
-
+var themePresets = urlParams.get('theme');
 
  // Store the starting position
 let startX = nowPlaying.getBoundingClientRect().left;
@@ -28,27 +28,35 @@ const PlayChangeAnimation = (scale) => {
 	
 	const animationValue = urlParams.get('animation');
 	
-	if (animationValue.toLowerCase() === "UpThenDown".toLowerCase())
+	
+	if (animationValue !== null)
 	{
-		  nowPlaying.style.transform = `translateY(${(1 - scale) * -200}%)`;
-	}
-	else if (animationValue.toLowerCase() === "DownThenUp".toLowerCase())
-	{
-		  nowPlaying.style.transform = `translateY(${(1 - scale) * 200}%)`;
-	}
-	else if (animationValue.toLowerCase() === "LeftThenRight".toLowerCase())
-	{
-		  nowPlaying.style.transform = `translateX(${(1 - scale) * -200}%)`;
-	}
-	else if (animationValue.toLowerCase() === "RightThenLeft".toLowerCase())
-	{
-		  nowPlaying.style.transform = `translateX(${(1 - scale) * 200}%)`;
+		
+		if (animationValue.toLowerCase() === "UpThenDown".toLowerCase())
+		{
+			  nowPlaying.style.transform = `translateY(${(1 - scale) * -200}%)`;
+		}
+		else if (animationValue.toLowerCase() === "DownThenUp".toLowerCase())
+		{
+			  nowPlaying.style.transform = `translateY(${(1 - scale) * 200}%)`;
+		}
+		else if (animationValue.toLowerCase() === "LeftThenRight".toLowerCase())
+		{
+			  nowPlaying.style.transform = `translateX(${(1 - scale) * -200}%)`;
+		}
+		else if (animationValue.toLowerCase() === "RightThenLeft".toLowerCase())
+		{
+			  nowPlaying.style.transform = `translateX(${(1 - scale) * 200}%)`;
+		}
+		else
+		{
+			 nowPlaying.style.transform = `scale(${scale})`;
+		}
 	}
 	else
 	{
-		 nowPlaying.style.transform = `scale(${scale})`;
+		nowPlaying.style.transform = `scale(${scale})`;
 	}
-	
 	nowPlaying.style.transition = `transform ${updateDuration}ms ease-in-out`;
 };
 
@@ -85,7 +93,23 @@ const updateNowPlaying = (data) => {
 	artists.textContent = data.artists.join(', ');
 	
 	// Slide the cover back into place
-	updateCoverBackground(data.cover_path);
+	
+	if (themePresets !== null)
+	{
+		if (themePresets.toLowerCase() === "Simple".toLowerCase())
+		{
+			updateCoverBackground("");
+		}
+		else
+		{
+			updateCoverBackground(data.cover_path);
+		}
+	}
+	else
+	{
+		updateCoverBackground(data.cover_path);
+	}
+
 	
 	// Update the current data and reset the flag
 	
@@ -179,60 +203,73 @@ const updateNowPlayingData = () => {
 const updatePosition = () => {
 	var position = urlParams.get('position');
 
-	if (position.toLowerCase() === "TopLeft".toLowerCase())
-	{
-		body.style.justifyContent = `flex-start`;
-		body.style.alignItems = `flex-start`;
-	}
-	else if (position.toLowerCase() === "BottomLeft".toLowerCase())
-	{
-		body.style.justifyContent = `flex-start`;
-		body.style.alignItems = `flex-end`;
-	}
-	else if (position.toLowerCase() === "CenterLeft".toLowerCase())
-	{
-		body.style.justifyContent = `flex-start`;
-		body.style.alignItems = `center`;
-	}
-	else if (position.toLowerCase() === "TopRight".toLowerCase())
-	{
-		body.style.justifyContent = `flex-end`;
-		body.style.alignItems = `flex-start`;
-	}
-	else if (position.toLowerCase() === "BottomRight".toLowerCase())
-	{
-		body.style.justifyContent = `flex-end`;
-		body.style.alignItems = `flex-end`;
-	}
-	else if (position.toLowerCase() === "CenterRight".toLowerCase())
-	{
-		body.style.justifyContent = `flex-end`;
-		body.style.alignItems = `center`;
-	}
-	else if (position.toLowerCase() === "TopCenter".toLowerCase())
-	{
-		body.style.justifyContent = `center`;
-		body.style.alignItems = `flex-start`;
-	}
-	else if (position.toLowerCase() === "BottomCenter".toLowerCase())
-	{
-		body.style.justifyContent = `center`;
-		body.style.alignItems = `flex-end`;
-	}
-	else if (position.toLowerCase() === "Center".toLowerCase())
-	{
-		body.style.justifyContent = `center`;
-		body.style.alignItems = `center`;
-	}
-	
-	var durTime = urlParams.get('duration');
-	if (durTime === null)
-	{
-		updateDuration = 1000;
+	if (position !== null)
+	{	
+		if (position.toLowerCase() === "TopLeft".toLowerCase())
+		{
+			body.style.justifyContent = `flex-start`;
+			body.style.alignItems = `flex-start`;
+		}
+		else if (position.toLowerCase() === "BottomLeft".toLowerCase())
+		{
+			body.style.justifyContent = `flex-start`;
+			body.style.alignItems = `flex-end`;
+		}
+		else if (position.toLowerCase() === "CenterLeft".toLowerCase())
+		{
+			body.style.justifyContent = `flex-start`;
+			body.style.alignItems = `center`;
+		}
+		else if (position.toLowerCase() === "TopRight".toLowerCase())
+		{
+			body.style.justifyContent = `flex-end`;
+			body.style.alignItems = `flex-start`;
+		}
+		else if (position.toLowerCase() === "BottomRight".toLowerCase())
+		{
+			body.style.justifyContent = `flex-end`;
+			body.style.alignItems = `flex-end`;
+		}
+		else if (position.toLowerCase() === "CenterRight".toLowerCase())
+		{
+			body.style.justifyContent = `flex-end`;
+			body.style.alignItems = `center`;
+		}
+		else if (position.toLowerCase() === "TopCenter".toLowerCase())
+		{
+			body.style.justifyContent = `center`;
+			body.style.alignItems = `flex-start`;
+		}
+		else if (position.toLowerCase() === "BottomCenter".toLowerCase())
+		{
+			body.style.justifyContent = `center`;
+			body.style.alignItems = `flex-end`;
+		}
+		else if (position.toLowerCase() === "Center".toLowerCase())
+		{
+			body.style.justifyContent = `center`;
+			body.style.alignItems = `center`;
+		}
+		else
+		{
+			body.style.justifyContent = `flex-start`;
+			body.style.alignItems = `flex-start`;
+		}
 	}
 	else
 	{
+			body.style.justifyContent = `flex-start`;
+			body.style.alignItems = `flex-start`;
+	}
+	
+	var durTime = urlParams.get('duration');
+	if (durTime !== null)
+	{
 		updateDuration = durTime;
+	}
+	else
+	{
+		updateDuration = 1000;
 	}	
 	
 };
@@ -241,4 +278,4 @@ updatePosition();
 updateNowPlayingData();
 
 // Periodically update the Now Playing data every 5 seconds
-setInterval(updateNowPlayingData, 1000);
+setInterval(updateNowPlayingData, 2500);

@@ -11,8 +11,9 @@
 	
 		<label for="baseURL">Style:</label>
         <select id="baseURL" name="baseURL">
-			<option value="https://maikatura.github.io/TunaPresets/Default.html">Default</option>
-			<option value="https://maikatura.github.io/TunaPresets/Compact.html">Compact</option>
+			<option value="Default">Default</option>
+			<option value="Compact">Compact</option>
+			<option value="Simple">Simple</option>
 
 			
 		</select>
@@ -59,12 +60,13 @@
             const duration = document.getElementById("duration").value;
 
             const queryParams = new URLSearchParams({
+				theme: baseURL,
                 position: position,
                 animation: animation,
                 duration: duration
             });
 
-            const finalURL = `${baseURL}?${queryParams.toString()}`;
+            var finalURL = `https://maikatura.github.io/TunaPresets/${baseURL}.html?${queryParams.toString()}`;
             document.getElementById("generatedURL").textContent = finalURL;
         });
     </script>
