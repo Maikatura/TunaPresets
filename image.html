@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Reflector</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        img {
+            transform: scaleX(-1);
+        }
+    </style>
+</head>
+<body>
+    <img id="reflectedImage" src="" alt="Reflected Image">
+    <script>
+        // Function to get the URL parameter
+        function getUrlParameter(parameterName) {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            return urlParams.get(parameterName);
+        }
+
+        // Get the "image" parameter from the URL
+        const imageUrl = getUrlParameter("image");
+
+        if (imageUrl) {
+            // Set the source of the image to the provided URL
+            document.getElementById("reflectedImage").src = imageUrl;
+        } else {
+            // Display a default image or message if no parameter is provided
+            document.getElementById("reflectedImage").src = "default.jpg";
+        }
+    </script>
+</body>
+</html>
