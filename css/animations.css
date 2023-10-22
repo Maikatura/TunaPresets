@@ -1,12 +1,89 @@
-.flip-horizontal-bottom {
-	animation: flip-horizontal-bottom 0.4s ease-in-out both;
-}
 
-@keyframes flip-horizontal-bottom {
+/* Define keyframes for animations */
+@keyframes upThenDown {
   0% {
-    transform: rotateX(0);
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-200%);
   }
   100% {
-    transform: rotateX(-180deg);
+    transform: translateY(0);
   }
+}
+
+@keyframes downThenUp {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(200%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes leftThenRight {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes rightThenLeft {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Define keyframes for scale animation */
+@keyframes scaleAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Define keyframes for scale animation */
+@keyframes scaleFirstAnimation {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+/* Add transitions for smoother effects */
+.transform-animation {
+  transition: transform ease-in-out;
+}
+
+.scale-animation {
+  animation: scaleAnimation 2s ease-in-out forwards;
+}
+
+.scale-animation-first {
+  animation: scaleFirstAnimation 2s ease-in-out forwards;
 }

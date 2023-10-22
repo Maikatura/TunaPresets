@@ -19,7 +19,6 @@ body {
     padding: 8px; /* Reduce padding */
     border-radius: 10px;
     margin: 20px; /* Add some margin from the top-left corner */
-	transform: scale(0);
 }
 
 .cover-background {

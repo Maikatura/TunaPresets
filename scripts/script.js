@@ -12,33 +12,42 @@ let isUpdateInProgress = false;
 let currentData = null;
 let updateDuration = 1000; // Duration for scaling transitions in milliseconds
 
-const PlayChangeAnimation = (scale) => {
+const PlayChangeAnimation = (scale, shouldBeInstant) => {
   const animationValue = urlParams.get('animation');
   const animationClass = animationValue ? animationValue.toLowerCase() : '';
+  const transitionProperties = [];
 
   switch (animationClass) {
     case "up":
-		nowPlaying.style.transform = `translateY(${(1 - scale) * 200}%)`;
-		break;
+      transitionProperties.push({ property: 'transform', value: `translateY(${(1 - scale) * 200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      break;
     case "down":
-		nowPlaying.style.transform = `translateY(${(1 - scale) * -200}%)`;
-		break;
+      transitionProperties.push({ property: 'transform', value: `translateY(${(1 - scale) * -200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      break;
     case "left":
-		nowPlaying.style.transform = `translateX(${(1 - scale) * -200}%)`;
-		break;
+      transitionProperties.push({ property: 'transform', value: `translateX(${(1 - scale) * -200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      break;
     case "right":
-		nowPlaying.style.transform = `translateX(${(1 - scale) * 200}%)`;
-		break;
+      transitionProperties.push({ property: 'transform', value: `translateX(${(1 - scale) * 200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      break;
+	case "scale":
     default:
-		nowPlaying.style.transform = `scale(${scale})`;
-		break;
+      transitionProperties.push({ property: 'transform', value: `scale(${scale})`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      break;
   }
 
-  nowPlaying.style.transition = `transform ${updateDuration}ms ease-in-out`;
+  // Apply the transitions to the element
+  nowPlaying.style.transition = transitionProperties.map(property => `${property.property} ${shouldBeInstant ? 0 : property.duration} ${property.timingFunction}`).join(', ');
+
+  // Apply the corresponding values for each property
+  transitionProperties.forEach(property => {
+    nowPlaying.style[property.property] = property.value;
+  });
 };
 
 const updateNowPlaying = (data) => {
-  if (!data || !data.cover_path || !data.title || !data.artists) {
+  if (!data || !data.cover_path || !data.title || !data.artists) 
+  {
     return;
   }
 
@@ -48,9 +57,12 @@ const updateNowPlaying = (data) => {
 
   const themePresets = urlParams.get('theme');
 
-  if (themePresets !== null && themePresets.toLowerCase() === "simple") {
+  if (themePresets !== null && themePresets.toLowerCase() === "simple") 
+  {
     updateCoverBackground("");
-  } else {
+  } 
+  else 
+  {
     updateCoverBackground(data.cover_path);
   }
 };
@@ -60,7 +72,8 @@ const updateCoverBackground = (imageUrl) => {
 };
 
 const isSameData = (data1, data2) => {
-  if (!data1 || !data2 || !data1.artists || !data2.artists) {
+  if (!data1 || !data2 || !data1.artists || !data2.artists) 
+  {
     return false;
   }
 
@@ -72,7 +85,8 @@ const isSameData = (data1, data2) => {
 };
 
 const updateNowPlayingDataWithAnimation = (data) => {
-  if (isUpdateInProgress || isSameData(data, currentData)) {
+  if (isUpdateInProgress || isSameData(data, currentData)) 
+  {
     return;
   }
 
@@ -80,6 +94,7 @@ const updateNowPlayingDataWithAnimation = (data) => {
   isUpdateInProgress = true;
 
   PlayChangeAnimation(0);
+  
 
   setTimeout(() => {
     updateNowPlaying(data);
@@ -152,5 +167,6 @@ const updatePosition = () => {
 
 updatePosition();
 updateNowPlayingData();
+PlayChangeAnimation(0, true);
 
 setInterval(updateNowPlayingData, 2500); // Periodically update the Now Playing data every 2.5 seconds
