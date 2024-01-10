@@ -1,0 +1,24 @@
+.container-custom
+{
+    width: 80%;
+    margin: 0 auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.container-custom img {
+    width: 100%;
+    height: auto;
+}
+
+
+@media screen and (max-width: 768px) 
+{
+    .container-custom 
+    {
+        width: 90%;
+    }
+}
+

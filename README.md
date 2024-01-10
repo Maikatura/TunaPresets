@@ -3,7 +3,7 @@
 ![](setup/showcase.gif)
 
 
-## [Use the URL Builder](https://maikatura.github.io/TunaPresets/StringBuilder.html)
+## [Use the URL Builder](https://maikatura.github.io/TunaPresets/index.html)
 
 
 ### Setup
