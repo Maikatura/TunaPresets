@@ -5,66 +5,69 @@ const coverImage = document.getElementById('coverImage');
 const title = document.getElementById('title');
 const artists = document.getElementById('artists');
 const album = document.getElementById('album');
-const coverContainer = document.querySelector('.cover-container');
 const coverBackground = document.querySelector('.cover-background');
 
 let isUpdateInProgress = false;
 let currentData = null;
 let updateDuration = 1000; // Duration for scaling transitions in milliseconds
 
-const PlayChangeAnimation = (scale, shouldBeInstant) => {
+const PlayChangeAnimation = (scale, shouldBeInstant, callback) => {
   const animationValue = urlParams.get('animation');
   const animationClass = animationValue ? animationValue.toLowerCase() : '';
   const transitionProperties = [];
 
+  const defaultProperties = {
+    duration: `${updateDuration}ms`,
+    timingFunction: 'ease-in-out'
+  };
+
   switch (animationClass) {
     case "up":
-      transitionProperties.push({ property: 'transform', value: `translateY(${(1 - scale) * 200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      transitionProperties.push({ property: 'transform', value: `translateY(${(1 - scale) * 200}%)`, ...defaultProperties });
       break;
     case "down":
-      transitionProperties.push({ property: 'transform', value: `translateY(${(1 - scale) * -200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      transitionProperties.push({ property: 'transform', value: `translateY(${(1 - scale) * -200}%)`, ...defaultProperties });
       break;
     case "left":
-      transitionProperties.push({ property: 'transform', value: `translateX(${(1 - scale) * -200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      transitionProperties.push({ property: 'transform', value: `translateX(${(1 - scale) * -200}%)`, ...defaultProperties });
       break;
     case "right":
-      transitionProperties.push({ property: 'transform', value: `translateX(${(1 - scale) * 200}%)`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      transitionProperties.push({ property: 'transform', value: `translateX(${(1 - scale) * 200}%)`, ...defaultProperties });
       break;
-	case "scale":
+    case "scale":
     default:
-      transitionProperties.push({ property: 'transform', value: `scale(${scale})`, duration: `${updateDuration}ms`, timingFunction: 'ease-in-out' });
+      transitionProperties.push({ property: 'transform', value: `scale(${scale})`, ...defaultProperties });
       break;
   }
 
   // Apply the transitions to the element
-  nowPlaying.style.transition = transitionProperties.map(property => `${property.property} ${shouldBeInstant ? 0 : property.duration} ${property.timingFunction}`).join(', ');
+  nowPlaying.classList.add('transition-transform', shouldBeInstant ? 'duration-0' : `duration-${updateDuration}`);
+  nowPlaying.style.transform = transitionProperties.map(property => property.value).join(' ');
 
-  // Apply the corresponding values for each property
-  transitionProperties.forEach(property => {
-    nowPlaying.style[property.property] = property.value;
-  });
+  // Execute callback after animation duration
+  setTimeout(callback, shouldBeInstant ? 0 : updateDuration);
 };
 
 const updateNowPlaying = (data) => {
-  if (!data || !data.cover_path || !data.title || !data.artists) 
-  {
+  if (!data || data.cover_path === "n/a" || !data.title || !data.artists) {
+    nowPlaying.classList.add('hidden');
+    coverImage.classList.add('hidden');
     return;
   }
 
-  coverImage.src = data.cover_path;
+  coverImage.src = data.cover_url;
   title.textContent = data.title;
   artists.textContent = data.artists.join(', ');
 
   const themePresets = urlParams.get('theme');
 
-  if (themePresets !== null && themePresets.toLowerCase() === "simple") 
-  {
+  if (themePresets !== null && themePresets.toLowerCase() === "simple") {
     updateCoverBackground("");
-  } 
-  else 
-  {
-    updateCoverBackground(data.cover_path);
+  } else {
+    updateCoverBackground(data.cover_url);
   }
+  nowPlaying.classList.remove('hidden'); // Show the element again
+  coverImage.classList.remove('hidden');
 };
 
 const updateCoverBackground = (imageUrl) => {
@@ -72,8 +75,7 @@ const updateCoverBackground = (imageUrl) => {
 };
 
 const isSameData = (data1, data2) => {
-  if (!data1 || !data2 || !data1.artists || !data2.artists) 
-  {
+  if (!data1 || !data2 || !data1.artists || !data2.artists) {
     return false;
   }
 
@@ -84,24 +86,36 @@ const isSameData = (data1, data2) => {
   );
 };
 
+const isValidData = (data) => {
+  return data && data.cover_path !== "n/a" && data.title && data.artists && data.status !== "unknown";
+};
+
 const updateNowPlayingDataWithAnimation = (data) => {
-  if (isUpdateInProgress || isSameData(data, currentData)) 
-  {
+  if (isUpdateInProgress) {
     return;
   }
 
-  currentData = data;
+  if (isSameData(data, currentData)) {
+    return;
+  }
+
   isUpdateInProgress = true;
 
-  PlayChangeAnimation(0);
-  
-
-  setTimeout(() => {
-    updateNowPlaying(data);
-    PlayChangeAnimation(1);
-    isUpdateInProgress = false;
-  }, updateDuration);
+  PlayChangeAnimation(0, false, () => {
+    if (isValidData(data)) {
+      currentData = data;
+      updateNowPlaying(data);
+      PlayChangeAnimation(1, false, () => {
+        isUpdateInProgress = false;
+      });
+    } else {
+      nowPlaying.classList.add('hidden');
+      coverImage.classList.add('hidden');
+      isUpdateInProgress = false;
+    }
+  });
 };
+
 
 const updateNowPlayingData = () => {
   fetch('http://localhost:1608')
@@ -111,6 +125,12 @@ const updateNowPlayingData = () => {
     })
     .catch(error => {
       console.error('Error fetching Now Playing data:', error);
+      coverImage.src = '';
+      title.textContent = '';
+      artists.textContent = '';
+      nowPlaying.classList.add('hidden');
+      coverImage.classList.add('hidden');
+      currentData = null;
       isUpdateInProgress = false;
     });
 };
@@ -120,49 +140,39 @@ const updatePosition = () => {
 
   switch (position ? position.toLowerCase() : '') {
     case "topleft":
-      body.style.justifyContent = "flex-start";
-      body.style.alignItems = "flex-start";
+      body.classList.add('justify-start', 'items-start');
       break;
     case "bottomleft":
-      body.style.justifyContent = "flex-start";
-      body.style.alignItems = "flex-end";
+      body.classList.add('justify-start', 'items-end');
       break;
     case "centerleft":
-      body.style.justifyContent = "flex-start";
-      body.style.alignItems = "center";
+      body.classList.add('justify-start', 'items-center');
       break;
     case "topright":
-      body.style.justifyContent = "flex-end";
-      body.style.alignItems = "flex-start";
+      body.classList.add('justify-end', 'items-start');
       break;
     case "bottomright":
-      body.style.justifyContent = "flex-end";
-      body.style.alignItems = "flex-end";
+      body.classList.add('justify-end', 'items-end');
       break;
     case "centerright":
-      body.style.justifyContent = "flex-end";
-      body.style.alignItems = "center";
+      body.classList.add('justify-end', 'items-center');
       break;
     case "topcenter":
-      body.style.justifyContent = "center";
-      body.style.alignItems = "flex-start";
+      body.classList.add('justify-center', 'items-start');
       break;
     case "bottomcenter":
-      body.style.justifyContent = "center";
-      body.style.alignItems = "flex-end";
+      body.classList.add('justify-center', 'items-end');
       break;
     case "center":
-      body.style.justifyContent = "center";
-      body.style.alignItems = "center";
+      body.classList.add('justify-center', 'items-center');
       break;
     default:
-      body.style.justifyContent = "flex-start";
-      body.style.alignItems = "flex-start";
+      body.classList.add('justify-start', 'items-start');
       break;
   }
 
   const durTime = urlParams.get('duration');
-  updateDuration = durTime ? durTime : 1000;
+  updateDuration = durTime ? parseInt(durTime, 10) : 1000;
 };
 
 updatePosition();
