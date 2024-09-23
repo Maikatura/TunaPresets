@@ -21,6 +21,8 @@ const PlayChangeAnimation = (scale, shouldBeInstant, callback) => {
     timingFunction: 'ease-in-out'
   };
 
+  body.classList.add('overflow-hidden');
+
   switch (animationClass) {
     case "up":
       transitionProperties.push({ property: 'transform', value: `translateY(${(1 - scale) * 200}%)`, ...defaultProperties });
@@ -44,8 +46,14 @@ const PlayChangeAnimation = (scale, shouldBeInstant, callback) => {
   nowPlaying.classList.add('transition-transform', shouldBeInstant ? 'duration-0' : `duration-${updateDuration}`);
   nowPlaying.style.transform = transitionProperties.map(property => property.value).join(' ');
 
+
   // Execute callback after animation duration
-  setTimeout(callback, shouldBeInstant ? 0 : updateDuration);
+  setTimeout(() => {
+    // Restore overflow after animation
+
+    
+    callback();
+  }, shouldBeInstant ? 0 : updateDuration);
 };
 
 const updateNowPlaying = (data) => {
