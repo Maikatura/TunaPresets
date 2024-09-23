@@ -63,12 +63,7 @@ const PlayChangeAnimation = (scale, shouldBeInstant, callback) => {
 
 
   // Execute callback after animation duration
-  setTimeout(() => {
-    // Restore overflow after animation
-
-    
-    callback();
-  }, shouldBeInstant ? 0 : updateDuration);
+  setTimeout(callback, shouldBeInstant ? 0 : updateDuration);
 };
 
 const updateNowPlaying = (data) => {
@@ -78,16 +73,18 @@ const updateNowPlaying = (data) => {
     return;
   }
 
-  coverImage.src = data.cover_url;
+  coverImage.src = data.cover_path;
   title.textContent = data.title;
   artists.textContent = data.artists.join(', ');
+
+  console.log("update cover");
 
   const themePresets = urlParams.get('theme');
 
   if (themePresets !== null && themePresets.toLowerCase() === "simple") {
     updateCoverBackground("");
   } else {
-    updateCoverBackground(data.cover_url);
+    updateCoverBackground(data.cover_path);
   }
   nowPlaying.classList.remove('hidden'); // Show the element again
   coverImage.classList.remove('hidden');
