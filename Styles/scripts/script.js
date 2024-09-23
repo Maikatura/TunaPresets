@@ -11,6 +11,21 @@ let isUpdateInProgress = false;
 let currentData = null;
 let updateDuration = 1000; // Duration for scaling transitions in milliseconds
 
+
+const loadThemeStylesheet = (theme) => {
+  const head = document.getElementsByTagName('head')[0];
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = `css/${theme}.css`;
+  head.appendChild(link);
+};
+
+const themePresets = urlParams.get('theme');
+if (themePresets) {
+  loadThemeStylesheet(themePresets);
+}
+
 const PlayChangeAnimation = (scale, shouldBeInstant, callback) => {
   const animationValue = urlParams.get('animation');
   const animationClass = animationValue ? animationValue.toLowerCase() : '';
@@ -182,6 +197,8 @@ const updatePosition = () => {
   const durTime = urlParams.get('duration');
   updateDuration = durTime ? parseInt(durTime, 10) : 1000;
 };
+
+
 
 updatePosition();
 updateNowPlayingData();
