@@ -95,6 +95,7 @@ const updateNowPlaying = (data) => {
   if (!data || data.cover_path === "n/a" || !data.title || !data.artists) {
     nowPlaying.classList.add('hidden');
     coverImage.classList.add('hidden');
+    PlayChangeAnimation(0, false);
     return;
   }
 
@@ -160,6 +161,7 @@ const updateNowPlayingDataWithAnimation = (data) => {
         isUpdateInProgress = false;
       });
     } else {
+      PlayChangeAnimation(0, false);
       nowPlaying.classList.add('hidden');
       coverImage.classList.add('hidden');
       isUpdateInProgress = false;
@@ -179,6 +181,7 @@ const updateNowPlayingData = () => {
       coverImage.src = '';
       title.textContent = '';
       artists.textContent = '';
+      PlayChangeAnimation(0, false);
       nowPlaying.classList.add('hidden');
       coverImage.classList.add('hidden');
       currentData = null;
