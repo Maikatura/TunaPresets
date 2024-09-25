@@ -101,7 +101,7 @@ const updateNowPlaying = (data) => {
 
   coverImage.src = data.cover_path;
   title.textContent = data.title;
-  artists.textContent = data.artists.join(', ');
+  artists.textContent = data.artists[0];
 
   //applyScrolling();
 
@@ -181,11 +181,11 @@ const updateNowPlayingData = () => {
       coverImage.src = '';
       title.textContent = '';
       artists.textContent = '';
-      PlayChangeAnimation(0, false);
       nowPlaying.classList.add('hidden');
       coverImage.classList.add('hidden');
       currentData = null;
       isUpdateInProgress = false;
+      PlayChangeAnimation(0, false);
     });
 };
 
