@@ -15,7 +15,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    max-width: 400px; /* Reduce max-width for a more compact layout */
+    max-width: 300px; /* Reduce max-width for a more compact layout */
     border-radius: 10px;
     margin: 10px; /* Add some margin from the top-left corner */
 }
