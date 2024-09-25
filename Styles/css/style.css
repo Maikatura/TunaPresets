@@ -1,9 +1,9 @@
 @keyframes scroll-text {
     0% {
-        transform: translateX(100%); /* Start at the right side (off-screen) */
+        transform: translateX(calc(1 *var(--scroll-offset)));; /* Start at the right side (off-screen) */
       }
       100% {
-        transform: translateX(-100%); /* Move completely to the left side */
+        transform: translateX(calc(-1 * (var(--scroll-distance) + var(--scroll-offset)))); /* Move completely to the left side */
       }
   }
   
@@ -16,7 +16,7 @@
       transform: translateX(0);
     }
     45% {
-      transform: translateX(calc(-1 * var(--scroll-distance)));
+      transform: translateX(calc(-1 * var(--scroll-distance * 0.5)));
     }
     55% {
       transform: translateX(calc(-1 * var(--scroll-distance)));
@@ -28,6 +28,6 @@
   
   .scrolling-text {
     display: inline-flex;
-  animation: scroll 30s ease-in-out infinite;
+  animation: scroll-text 10s linear infinite;
 text-overflow: clip;
   }

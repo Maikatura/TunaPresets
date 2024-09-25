@@ -73,14 +73,20 @@ const applyScrolling = () => {
   const titleWidth = title.scrollWidth;
   const detailsWidth = detailsElement.scrollWidth;
   const overflowWidth = titleWidth - detailsWidth;
+  const letterCount = title.textContent.length;
+  const animationDuration = letterCount / 3;
 
   console.log(`Title Width: ${titleWidth}px, Container Width: ${detailsWidth}px, Overflow Width: ${overflowWidth}px`);
 
   if (overflowWidth > 0) {
     title.style.setProperty('--scroll-distance', `${overflowWidth}px`);
+    title.style.setProperty('--scroll-offset', `${detailsWidth + 10}px`);
+    title.style.animationDuration = `${animationDuration}s`;
     title.classList.add('scrolling-text');
   } else {
     title.classList.remove('scrolling-text');
+    title.style.animationDuration = `0s`;
+    title.style.removeProperty('--scroll-distance');
   }
 
 };
@@ -96,7 +102,7 @@ const updateNowPlaying = (data) => {
   title.textContent = data.title;
   artists.textContent = data.artists.join(', ');
 
-  applyScrolling();
+  //applyScrolling();
 
   console.log("update cover");
 
@@ -109,6 +115,7 @@ const updateNowPlaying = (data) => {
   }
   nowPlaying.classList.remove('hidden'); // Show the element again
   coverImage.classList.remove('hidden');
+  applyScrolling();
 };
 
 const updateCoverBackground = (imageUrl) => {
@@ -145,6 +152,9 @@ const updateNowPlayingDataWithAnimation = (data) => {
   PlayChangeAnimation(0, false, () => {
     if (isValidData(data)) {
       currentData = data;
+      title.classList.remove('scrolling-text');
+      title.style.animationDuration = `0s`;
+      title.style.removeProperty('--scroll-distance');
       updateNowPlaying(data);
       PlayChangeAnimation(1, false, () => {
         isUpdateInProgress = false;
