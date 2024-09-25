@@ -14,12 +14,9 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 6px;
-    border-radius: 8px;
-    margin: 20px;
-    transform: scale(0);
+    max-width: 350px; /* Reduce max-width for a more compact layout */
+    border-radius: 10px;
+    margin: 10px; /* Add some margin from the top-left corner */
 }
 
 .cover-background {
@@ -55,19 +52,15 @@ body {
 }
 
 .details {
-    flex: 1;
-    padding: 0 8px;
     text-align: left;
 }
 
 h1 {
     font-size: 1.1em; /* Slightly larger font size */
     font-weight: bold;
-    margin: 3px 0;
 }
 
 p {
-    margin: 2px 0;
     font-size: 0.9em; /* Slightly larger font size */
     color: #ccc;
 }

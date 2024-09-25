@@ -52,6 +52,16 @@
 			<option value="right">Right</option>
 		</select>
 		<br><br>
+
+		<label for="bg-color">Background color:</label><br>
+		<select id="bg-color" name="bg-color">
+			<option value="">None</option>
+			<option value="blue">Blue</option>
+			<option value="red">Red</option>
+			<option value="gray">Gray</option>
+			<option value="purple">Purple</option>
+		</select>
+		<br><br>
 		
         <label for="duration">Duration (ms):</label><br>
         <input type="text" id="duration" name="duration" value="1000"><br><br>
@@ -68,12 +78,14 @@
             const position = document.getElementById("position").value;
             const animation = document.getElementById("animation").value;
             const duration = document.getElementById("duration").value;
+			const bgColor = document.getElementById("bg-color").value;
 
             const queryParams = new URLSearchParams({
 				theme: baseURL,
                 position: position,
                 animation: animation,
-                duration: duration
+                duration: duration,
+				bgcolor: bgColor
             });
 
             var finalURL = `https://maikatura.github.io/TunaPresets/Styles/index.html?${queryParams.toString()}`;

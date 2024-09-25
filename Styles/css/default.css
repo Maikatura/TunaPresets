@@ -16,7 +16,6 @@ body {
     align-items: center;
     max-width: 400px; /* Reduce max-width for a more compact layout */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Reduce box-shadow size */
-    padding: 8px; /* Reduce padding */
     border-radius: 10px;
     margin: 20px; /* Add some margin from the top-left corner */
 	transform: scale(0);
@@ -63,20 +62,15 @@ body {
 }
 
 .details {
-    flex: 1;
-    padding-left: 10px; /* Reduce padding */
-    padding-right: 10px; /* Reduce padding */
     text-align: left;
 }
 
 h1 {
     font-size: 16px; /* Reduce font size */
     font-weight: bold;
-    margin: 3px 0; /* Reduce margin */
 }
 
 p {
-    margin: 2px 0; /* Reduce margin */
     font-size: 12px; /* Reduce font size */
     color: #cccccc; /* Lighter text color in dark mode */
 }

@@ -5,24 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Now Playing</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/simple.css">
     <link rel="stylesheet" href="fonts/nunito.css">
     <link rel="stylesheet" href="css/animations.css">
 </head>
 <body class="overflow-hidden w-full h-full">
-    <div class="now-playing overflow-hidden">
-        <div class="cover-background">
-            <div class="blur-wrapper"></div>
-        </div>
-        <div class="cover-container">
-            <img id="coverImage" src="" alt="Album Cover">
-        </div>
-        <div class="details">
-            <h1 id="title">Title</h1>
-            <p id="artists">Artists</p>
+    <div class="now-playing overflow-hidden rounded-lg text-white">
+        <div class="cover-background bg-cover bg-center opacity-30 absolute inset-0 m-1"></div>
+        <div class="blur-wrapper absolute inset-0"></div>
+        <div class="flex items-center overflow-hidden p-2">
+            <div class="cover-container mr-2">
+                <img id="coverImage" src="" alt="Album Cover" class="w-32 h-32 rounded-lg shadow-md">
+            </div>
+            <div class="details text-center overflow-hidden">
+                <h1 id="title" class="text-xl font-bold whitespace-nowrap overflow-hidden">Title</h1>
+                <p id="artists" class="text-sm">Artists</p>
+            </div>
         </div>
     </div>
 
     <script src="scripts/script.js"></script>
+    <script src="scripts/stylesetup.js"></script>
 </body>
 </html>
