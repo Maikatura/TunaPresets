@@ -19,6 +19,8 @@ body {
     border-radius: 10px;
     margin: 20px; /* Add some margin from the top-left corner */
 	transform: scale(0);
+    opacity: 1; /* explicit baseline so JS transitions have something to work from */
+    will-change: transform, opacity;
 }
 
 .cover-background {

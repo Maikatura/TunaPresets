@@ -17,6 +17,8 @@ body {
     max-width: 350px; /* Reduce max-width for a more compact layout */
     border-radius: 10px;
     margin: 10px; /* Add some margin from the top-left corner */
+    opacity: 1; /* explicit baseline so JS transitions have something to work from */
+    will-change: transform, opacity;
 }
 
 .cover-background {

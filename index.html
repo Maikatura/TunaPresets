@@ -3,96 +3,457 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Generator</title>
-	<link rel="stylesheet" href="css/compact.css">
-    <link rel="stylesheet" href="fonts/default.css">
-	<link rel="stylesheet" href="css/animations.css">
-	<link rel="stylesheet" type="text/css" href="Styles/css/bootstrap/vapor2.bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="Styles/css/custom.css">
-	<script type="text/javascript" src="Styles/js/jquery-3.7.1.min.js"></script>
-	<script type="text/javascript" src="Styles/js/bootstrap/bootstrap.min.js"></script>
-	<script type="text/javascript" src="Styles/js/popper.min.js"></script>
+    <title>TunaPresets — URL Generator</title>
+    <link rel="stylesheet" type="text/css" href="Styles/css/bootstrap/vapor2.bootstrap.min.css">
+    <script src="Styles/js/jquery-3.7.1.min.js"></script>
+    <script src="Styles/js/bootstrap/bootstrap.min.js"></script>
+    <script src="Styles/js/popper.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
 
+        :root {
+            --bg: #0d0d0f;
+            --surface: #16161a;
+            --border: #2a2a35;
+            --accent: #7c3aed;
+            --accent2: #06b6d4;
+            --text: #e8e8f0;
+            --muted: #6b6b80;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.06) 0%, transparent 60%);
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 560px;
+            box-shadow: 0 0 60px rgba(124,58,237,0.08);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-family: 'Space Mono', monospace;
+            margin-top: 2px;
+        }
+
+        .field {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        select, input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 0.6rem 0.85rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b80' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.85rem center;
+            padding-right: 2.2rem;
+            cursor: pointer;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+        }
+
+        optgroup {
+            color: var(--accent2);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        option {
+            color: var(--text);
+            background: #1a1a22;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .loading-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-family: 'Space Mono', monospace;
+            color: var(--accent2);
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-left: auto;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent2);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--accent), #5b21b6);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-generate:hover { opacity: 0.9; }
+        .btn-generate:active { transform: scale(0.98); }
+
+        .output {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .output-box {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .output input {
+            flex: 1;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--accent2);
+            border-color: rgba(6,182,212,0.3);
+        }
+
+        .btn-copy {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--muted);
+            padding: 0 1rem;
+            cursor: pointer;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            border-color: var(--accent2);
+            color: var(--accent2);
+        }
+
+        .btn-copy.copied {
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 1.5rem 0;
+        }
+
+        .status {
+            font-size: 0.72rem;
+            font-family: 'Space Mono', monospace;
+            color: var(--muted);
+            margin-top: 0.5rem;
+        }
+
+        .status.error { color: #f87171; }
+        .status.ok { color: #34d399; }
+    </style>
 </head>
 <body>
-<center>
-    <h1>URL Generator</h1>
-    <form id="urlForm">
-	
-		<label for="baseURL">Style:</label><br>
-        <select id="baseURL" name="baseURL">
-			<option value="default">default</option>
-			<option value="compact">compact</option>
-			<option value="simple">simple</option>
+<div class="card">
+    <div class="header">
+        <div class="logo">🎵</div>
+        <div>
+            <h1>TunaPresets</h1>
+            <div class="subtitle">URL Generator</div>
+        </div>
+        <div class="loading-badge" id="loadBadge">
+            <div class="dot"></div>
+            loading
+        </div>
+    </div>
 
-			
-		</select>
-		<br><br>
-        <label for="position">Position:</label><br>
-        
-		<select id="position" name="position">
-			<option value="topleft">Top Left</option>
-			<option value="bottomleft">Bottom Left</option>
-			<option value="centerleft">Center Left</option>
-			<option value="topright">Top Right</option>
-			<option value="bottomright">Bottom Right</option>
-			<option value="centerright">Center Right</option>
-			<option value="topcenter">Top Center</option>
-			<option value="bottomcenter">Bottom Center</option>
-			<option value="center">Center</option>
-		</select>
-		<br><br>
+    <div class="field">
+        <label>Style / Theme</label>
+        <select id="baseURL">
+            <option value="default">Default</option>
+            <option value="compact">Compact</option>
+            <option value="simple">Simple</option>
+        </select>
+    </div>
 
-        <label for="animation">Animation:</label><br>
-		<select id="animation" name="animation">
-			<option value="">Default (Scale)</option>
-			<option value="up">Up</option>
-			<option value="down">Down</option>
-			<option value="left">Left</option>
-			<option value="right">Right</option>
-		</select>
-		<br><br>
+    <div class="grid-2">
+        <div class="field">
+            <label>Position</label>
+            <select id="position">
+                <option value="">Loading...</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Animation</label>
+            <select id="animation">
+                <option value="">Loading...</option>
+            </select>
+        </div>
+    </div>
 
-		<label for="bg-color">Background color:</label><br>
-		<select id="bg-color" name="bg-color">
-			<option value="">None</option>
-			<option value="blue">Blue</option>
-			<option value="red">Red</option>
-			<option value="gray">Gray</option>
-			<option value="purple">Purple</option>
-		</select>
-		<br><br>
-		
-        <label for="duration">Duration (ms):</label><br>
-        <input type="text" id="duration" name="duration" value="1000"><br><br>
+    <div class="grid-2">
+        <div class="field">
+            <label>Background Color</label>
+            <select id="bg-color">
+                <option value="">None</option>
+                <option value="blue">Blue</option>
+                <option value="red">Red</option>
+                <option value="gray">Gray</option>
+                <option value="purple">Purple</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Duration (ms)</label>
+            <input type="number" id="duration" value="1000" min="100" step="100">
+        </div>
+    </div>
 
-        <button type="button" id="generateButton">Generate URL</button><br><br>
-    </form>
+    <button class="btn-generate" id="generateButton">Generate URL</button>
 
-    <p>Generated URL:</p>
-    <p id="generatedURL"></p>
-	</center>
-    <script>
-        document.getElementById("generateButton").addEventListener("click", function() {
-			const baseURL = document.getElementById("baseURL").value;
-            const position = document.getElementById("position").value;
-            const animation = document.getElementById("animation").value;
-            const duration = document.getElementById("duration").value;
-			const bgColor = document.getElementById("bg-color").value;
+    <div class="output" id="outputBox">
+        <hr class="divider">
+        <label>Generated URL</label>
+        <div class="output-box">
+            <input type="text" id="generatedURL" readonly>
+            <button class="btn-copy" id="copyButton">Copy</button>
+        </div>
+    </div>
+</div>
 
-            const queryParams = new URLSearchParams({
-				theme: baseURL,
-                position: position,
-                animation: animation,
-                duration: duration,
-				bgcolor: bgColor
-            });
+<script>
+const ANIMATION_GROUPS = {
+    'Slide':   ['up', 'down', 'left', 'right'],
+    'Fade':    ['fade', 'fadezoom', 'fadeup', 'fadedown', 'fadeleft', 'faderight'],
+    'Zoom':    ['zoomin', 'zoomout'],
+    '3D':      ['flipx', 'flipy'],
+    'Special': ['spin', 'glitch', 'cassette'],
+};
 
-            var finalURL = `https://maikatura.github.io/TunaPresets/Styles/index.html?${queryParams.toString()}`;
-            document.getElementById("generatedURL").textContent = finalURL;
+const ANIMATION_LABELS = {
+    up: 'Up', down: 'Down', left: 'Left', right: 'Right',
+    fade: 'Fade', fadezoom: 'Fade Zoom',
+    fadeup: 'Fade Up', fadedown: 'Fade Down',
+    fadeleft: 'Fade Left', faderight: 'Fade Right',
+    zoomin: 'Zoom In', zoomout: 'Zoom Out',
+    flipx: 'Flip X', flipy: 'Flip Y',
+    spin: 'Spin', glitch: 'Glitch', cassette: 'Cassette',
+};
+
+const POSITION_LABELS = {
+    topleft: 'Top Left', bottomleft: 'Bottom Left', centerleft: 'Center Left',
+    topright: 'Top Right', bottomright: 'Bottom Right', centerright: 'Center Right',
+    topcenter: 'Top Center', bottomcenter: 'Bottom Center', center: 'Center',
+};
+
+const parseAnimationsFromSource = (src) => {
+    const found = [];
+    const regex = /case\s+'([^']+)'\s*:/g;
+    let match;
+    while ((match = regex.exec(src)) !== null) {
+        if (match[1] !== 'default') found.push(match[1]);
+    }
+    return found;
+};
+
+const parsePositionsFromSource = (src) => {
+    const match = src.match(/const POSITION_CLASSES\s*=\s*\{([^}]+)\}/s);
+    if (!match) return [];
+    return [...match[1].matchAll(/(\w+)\s*:/g)].map(m => m[1]);
+};
+
+const populateAnimations = (keys) => {
+    const sel = document.getElementById('animation');
+    sel.innerHTML = '<option value="">Default (Scale)</option>';
+
+    const grouped = {};
+    const usedKeys = new Set();
+
+    for (const [group, members] of Object.entries(ANIMATION_GROUPS)) {
+        const available = members.filter(k => keys.includes(k));
+        if (available.length) {
+            grouped[group] = available;
+            available.forEach(k => usedKeys.add(k));
+        }
+    }
+
+    const others = keys.filter(k => !usedKeys.has(k));
+    if (others.length) grouped['Other'] = others;
+
+    for (const [group, members] of Object.entries(grouped)) {
+        const og = document.createElement('optgroup');
+        og.label = group;
+        members.forEach(k => {
+            const opt = document.createElement('option');
+            opt.value = k;
+            opt.textContent = ANIMATION_LABELS[k] ?? k.charAt(0).toUpperCase() + k.slice(1);
+            og.appendChild(opt);
         });
-    </script>
-	
-</body>
+        sel.appendChild(og);
+    }
+};
 
+const populatePositions = (keys) => {
+    const sel = document.getElementById('position');
+    sel.innerHTML = '';
+    keys.forEach(k => {
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = POSITION_LABELS[k] ?? k;
+        sel.appendChild(opt);
+    });
+};
+
+const setStatus = (text, type = '') => {
+    const badge = document.getElementById('loadBadge');
+    badge.innerHTML = text;
+    badge.style.color = type === 'error' ? '#f87171' : type === 'ok' ? '#34d399' : '';
+    badge.style.borderColor = type === 'error' ? 'rgba(248,113,113,0.3)' : type === 'ok' ? 'rgba(52,211,153,0.3)' : '';
+    badge.style.background = type === 'error' ? 'rgba(248,113,113,0.08)' : type === 'ok' ? 'rgba(52,211,153,0.08)' : '';
+};
+
+Promise.all([
+    fetch('Styles/scripts/animations.js').then(r => r.text()),
+    fetch('Styles/scripts/styles.js').then(r => r.text()),
+]).then(([animSrc, stylesSrc]) => {
+    const animKeys = parseAnimationsFromSource(animSrc);
+    const posKeys  = parsePositionsFromSource(stylesSrc);
+
+    populateAnimations(animKeys);
+    populatePositions(posKeys);
+
+    setStatus('✓ synced', 'ok');
+    setTimeout(() => {
+        document.getElementById('loadBadge').style.display = 'none';
+    }, 2000);
+}).catch(err => {
+    console.warn('Could not fetch JS files, using defaults.', err);
+    populateAnimations(Object.values(ANIMATION_GROUPS).flat());
+    populatePositions(Object.keys(POSITION_LABELS));
+    setStatus('offline · defaults', 'error');
+});
+
+document.getElementById('generateButton').addEventListener('click', () => {
+    const params = new URLSearchParams({
+        theme:     document.getElementById('baseURL').value,
+        position:  document.getElementById('position').value,
+        animation: document.getElementById('animation').value,
+        duration:  document.getElementById('duration').value,
+        bgcolor:   document.getElementById('bg-color').value,
+    });
+
+
+    for (const [k, v] of [...params.entries()]) {
+        if (!v) params.delete(k);
+    }
+
+    const url = `https://maikatura.github.io/TunaPresets/Styles/index.html?${params}`;
+    document.getElementById('generatedURL').value = url;
+    document.getElementById('outputBox').style.display = 'block';
+});
+
+document.getElementById('copyButton').addEventListener('click', () => {
+    const url = document.getElementById('generatedURL').value;
+    navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('copyButton');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+});
+</script>
+</body>
 </html>
