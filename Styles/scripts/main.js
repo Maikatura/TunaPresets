@@ -43,7 +43,8 @@ const isValid = (data) =>
 const isSame = (a, b) =>
   a && b &&
   a.title === b.title &&
-  a.cover_path === b.cover_path &&
+  a.cover_path === b.cover_path && 
+  a.status === b.status &&
   JSON.stringify(a.artists) === JSON.stringify(b.artists);
 
 const render = (data) => {
@@ -57,12 +58,35 @@ const render = (data) => {
 };
 
 const hide = () => {
-  nowPlaying.classList.add('hidden');
-  coverImage.classList.add('hidden');
+
+  if (data.status === "stopped"){
+    nowPlaying.classList.add('hidden');
+    coverImage.classList.add('hidden');
+  }
+  else
+  {
+    nowPlaying.classList.remove('hidden');
+  coverImage.classList.remove('hidden');
+  }
+
+
+  
 };
 
 const update = async (data) => {
+
+
+if (data.status === "stopped") {
+    if (currentData !== null) {
+      await animate(nowPlaying, 0, animation);
+      currentData = null;
+    }
+    return;
+  }
+
   if (isSame(data, currentData)) return;
+
+
 
   await animate(nowPlaying, 0, animation);
 
