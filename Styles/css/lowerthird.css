@@ -1,0 +1,57 @@
+/* lowerthird.css — broadcast lower-third with accent bar. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&display=swap');
+
+.now-playing {
+  font-family: 'Archivo', sans-serif;
+  background: var(--np-bg, linear-gradient(90deg, rgba(8, 8, 12, 0.92) 60%, rgba(8, 8, 12, 0.55)));
+  border: none;
+  border-left: 5px solid var(--np-accent, #7c3aed);
+  border-radius: 0 12px 12px 0;
+  padding: 10px 26px 12px 12px;
+  gap: 14px;
+  max-width: 520px;
+  min-width: min(280px, 80vw);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 10px 34px rgba(0, 0, 0, 0.5);
+}
+
+.cover-background { opacity: 0.18; border-radius: 0 12px 12px 0; }
+.blur-wrapper {
+  backdrop-filter: blur(4px) brightness(0.6);
+  -webkit-backdrop-filter: blur(4px) brightness(0.6);
+  border-radius: 0 12px 12px 0;
+}
+
+.cover-container {
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.details h1 {
+  font-size: 19px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+}
+
+.details p {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--np-accent, #c4b5fd);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 3px;
+}
+
+#album {
+  color: #9a9aa8;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.progress { height: 3px; border-radius: 0 0 12px 0; overflow: hidden; }

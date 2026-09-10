@@ -3,319 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TunaPresets — URL Generator</title>
-    <link rel="stylesheet" type="text/css" href="Styles/css/bootstrap/vapor2.bootstrap.min.css">
-    <script src="Styles/js/jquery-3.7.1.min.js"></script>
-    <script src="Styles/js/bootstrap/bootstrap.min.js"></script>
-    <script src="Styles/js/popper.min.js"></script>
+    <title>Tuna Presets — Song Overlay Builder</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Yellowtail&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
         :root {
-            --bg: #0d0d0f;
-            --surface: #16161a;
-            --border: #2a2a35;
-            --accent: #7c3aed;
-            --accent2: #06b6d4;
-            --text: #e8e8f0;
-            --muted: #6b6b80;
+            --ink: #ece5da;
+            --ink-dim: #a89e8f;
+            --ink-faint: #6f665b;
+            --paper: #0b0a09;
+            --panel: #121110;
+            --line: #26211d;
+            --tube: #ff3d5a;
+            --tube-soft: rgba(255, 61, 90, 0.14);
+            --amber: #ffb02e;
+            --field: #0e0d0c;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Syne', sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Archivo', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
             background-image:
-                radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.06) 0%, transparent 60%);
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.014) 0 1px, transparent 1px 3px);
         }
 
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 560px;
-            box-shadow: 0 0 60px rgba(124,58,237,0.08);
-        }
-
-        .header {
+        .topbar {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .logo {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        h1 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
-        .subtitle {
-            font-size: 0.75rem;
-            color: var(--muted);
-            font-family: 'Space Mono', monospace;
-            margin-top: 2px;
-        }
-
-        .field {
-            margin-bottom: 1.25rem;
-        }
-
-        label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 0.4rem;
-        }
-
-        select, input {
-            width: 100%;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            padding: 0.6rem 0.85rem;
-            font-family: 'Syne', sans-serif;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b80' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.85rem center;
-            padding-right: 2.2rem;
-            cursor: pointer;
-        }
-
-        select:focus, input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
-        }
-
-        optgroup {
-            color: var(--accent2);
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        option {
-            color: var(--text);
-            background: #1a1a22;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            justify-content: space-between;
             gap: 1rem;
+            padding: 0.9rem 1.5rem;
+            border-bottom: 1px solid var(--line);
+            background: rgba(11, 10, 9, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .loading-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
-            font-family: 'Space Mono', monospace;
-            color: var(--accent2);
-            background: rgba(6,182,212,0.08);
-            border: 1px solid rgba(6,182,212,0.2);
-            border-radius: 4px;
-            padding: 2px 8px;
-            margin-left: auto;
+        .brand { display: flex; align-items: center; gap: 0.7rem; }
+        .brand svg { flex: 0 0 auto; }
+        .brand strong { display: block; font-size: 0.95rem; font-weight: 800; letter-spacing: 0.01em; }
+        .brand span { display: block; font-size: 0.75rem; color: var(--ink-dim); margin-top: 1px; }
+        .topbar a {
+            font-size: 0.8rem;
+            color: var(--ink-dim);
+            text-decoration: none;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 0.45rem 0.8rem;
+        }
+        .topbar a:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 340px;
+            gap: 1.25rem;
+            max-width: 1020px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            align-items: start;
+        }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 1.75rem;
         }
 
-        .dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent2);
-            border-radius: 50%;
-            animation: pulse 1.5s ease-in-out infinite;
+        .kicker { font-size: 0.75rem; font-weight: 600; color: var(--ink-faint); letter-spacing: 0.04em; }
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin: 0.35rem 0 0.4rem; }
+        h1 .neon {
+            font-family: 'Yellowtail', cursive;
+            font-weight: 400;
+            color: #ffd9de;
+            text-shadow:
+                0 0 6px rgba(255, 61, 90, 0.9),
+                0 0 18px rgba(255, 61, 90, 0.65),
+                0 0 42px rgba(255, 61, 90, 0.4);
+            white-space: nowrap;
         }
-
-        @keyframes pulse {
+        h1 .neon .flicker { animation: tube-flicker 6s linear infinite; display: inline-block; }
+        @keyframes tube-flicker {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            3% { opacity: 0.55; }
+            5% { opacity: 1; }
+            42% { opacity: 1; }
+            43% { opacity: 0.7; }
+            44% { opacity: 1; }
+            71% { opacity: 1; }
+            72% { opacity: 0.85; }
+            73% { opacity: 1; }
+        }
+        .lede { color: var(--ink-dim); font-size: 0.92rem; line-height: 1.55; max-width: 52ch; }
+        .lede code { font-family: 'IBM Plex Mono', monospace; font-size: 0.82em; color: var(--ink); background: #1b1917; padding: 1px 5px; border-radius: 4px; }
+
+        section.block { margin-top: 1.75rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+        section.block h2 { font-size: 1.02rem; font-weight: 700; display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.2rem; }
+        section.block h2 .num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--tube);
+            border: 1px solid rgba(255, 61, 90, 0.45);
+            background: var(--tube-soft);
+            border-radius: 5px;
+            padding: 2px 7px;
+        }
+        .sub { font-size: 0.83rem; color: var(--ink-faint); margin-bottom: 0.9rem; }
+
+        /* Theme picker: real radio cards instead of a bland dropdown */
+        .themes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+        @media (max-width: 560px) { .themes { grid-template-columns: 1fr; } }
+        .theme { position: relative; }
+        .theme input { position: absolute; opacity: 0; pointer-events: none; }
+        .theme label {
+            display: flex;
+            gap: 0.65rem;
+            align-items: flex-start;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 0.65rem 0.7rem;
+            cursor: pointer;
+            background: var(--field);
+            transition: border-color 0.15s;
+        }
+        .theme label:hover { border-color: var(--ink-faint); }
+        .theme input:checked + label { border-color: var(--tube); background: #171110; }
+        .theme input:focus-visible + label { outline: 2px solid var(--tube); outline-offset: 2px; }
+        .dot { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 7px; margin-top: 1px; border: 1px solid rgba(255,255,255,0.15); }
+        .theme b { display: block; font-size: 0.86rem; }
+        .theme small { display: block; font-size: 0.74rem; color: var(--ink-dim); margin-top: 2px; line-height: 1.4; }
+
+        .field { margin-bottom: 0.9rem; }
+        .field > span {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ink-dim);
+            margin-bottom: 0.35rem;
         }
 
-        .btn-generate {
+        select, input[type="text"], input[type="number"] {
             width: 100%;
-            padding: 0.75rem;
-            background: linear-gradient(135deg, var(--accent), #5b21b6);
+            background: var(--field);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: var(--ink);
+            padding: 0.55rem 0.7rem;
+            font-family: inherit;
+            font-size: 0.88rem;
+            outline: none;
+        }
+        select:focus, input:focus { border-color: var(--tube); box-shadow: 0 0 0 2px var(--tube-soft); }
+        option, optgroup { background: #171514; color: var(--ink); }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+        @media (max-width: 560px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .row-flex { display: flex; gap: 0.5rem; }
+        .row-flex input[type="color"] {
+            width: 44px; height: 36px; padding: 3px;
+            background: var(--field); border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
+        }
+
+        .checks { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+        .checks label {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.83rem;
+            border: 1px solid var(--line);
+            background: var(--field);
+            border-radius: 999px;
+            padding: 0.4rem 0.75rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .checks label:has(input:checked) { border-color: var(--tube); background: #1a1214; }
+        .checks input { accent-color: var(--tube); width: 14px; height: 14px; }
+
+        .btn-build {
+            width: 100%;
+            margin-top: 1.2rem;
+            padding: 0.8rem;
+            background: var(--tube);
             border: none;
             border-radius: 8px;
-            color: white;
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-            letter-spacing: 0.03em;
+            color: #1c0509;
+            font-family: inherit;
+            font-weight: 800;
+            font-size: 1rem;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-            margin-top: 0.5rem;
+            box-shadow: 3px 3px 0 #5c1020;
+            transition: transform 0.08s, box-shadow 0.08s;
         }
+        .btn-build:hover { filter: brightness(1.06); }
+        .btn-build:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #5c1020; }
 
-        .btn-generate:hover { opacity: 0.9; }
-        .btn-generate:active { transform: scale(0.98); }
-
-        .output {
-            margin-top: 1.5rem;
-            display: none;
+        .btn-row { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+        .btn-ghost {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--ink-dim);
+            padding: 0.55rem;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.83rem;
         }
+        .btn-ghost:hover { color: var(--ink); border-color: var(--ink-faint); }
 
-        .output-box {
-            display: flex;
-            gap: 8px;
-            align-items: stretch;
-        }
-
+        .output { margin-top: 1.1rem; display: none; border: 1px dashed rgba(255,61,90,0.5); border-radius: 8px; padding: 0.9rem; background: #141010; }
+        .output p { font-size: 0.8rem; color: var(--ink-dim); margin-bottom: 0.5rem; }
+        .output-box { display: flex; gap: 0.5rem; }
         .output input {
             flex: 1;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--accent2);
-            border-color: rgba(6,182,212,0.3);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: #ffc9d2;
+            min-width: 0;
         }
-
         .btn-copy {
-            background: transparent;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--muted);
-            padding: 0 1rem;
+            background: var(--field);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: var(--ink);
+            padding: 0 0.9rem;
             cursor: pointer;
-            font-family: 'Syne', sans-serif;
+            font-family: inherit;
             font-size: 0.8rem;
             white-space: nowrap;
-            transition: all 0.2s;
         }
+        .btn-copy:hover { border-color: var(--tube); }
+        .btn-copy.copied { border-color: #3fa46a; color: #7bd89a; }
 
-        .btn-copy:hover {
-            border-color: var(--accent2);
-            color: var(--accent2);
+        /* Preview column */
+        .side { position: sticky; top: 76px; display: flex; flex-direction: column; gap: 1.25rem; }
+        @media (max-width: 900px) { .side { position: static; } }
+        .side h2 { font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; }
+        .live {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            color: #1c0509;
+            background: var(--amber);
+            border-radius: 4px;
+            padding: 2px 7px;
+            letter-spacing: 0.06em;
         }
-
-        .btn-copy.copied {
-            border-color: #10b981;
-            color: #10b981;
+        #previewFrame {
+            width: 100%;
+            height: 210px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: repeating-conic-gradient(#141210 0% 25%, #0d0c0b 0% 50%) 0 0 / 22px 22px;
         }
+        .steps { margin-top: 0.9rem; padding-left: 1.1rem; color: var(--ink-dim); font-size: 0.83rem; line-height: 1.65; }
+        .steps code { font-family: 'IBM Plex Mono', monospace; font-size: 0.76em; color: var(--ink); background: #1b1917; padding: 1px 5px; border-radius: 4px; }
+        .note { margin-top: 0.7rem; font-size: 0.76rem; color: var(--ink-faint); line-height: 1.6; }
+        .note code { font-family: 'IBM Plex Mono', monospace; color: var(--ink-dim); }
 
-        .divider {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 1.5rem 0;
+        footer { text-align: center; color: var(--ink-faint); font-size: 0.75rem; padding-bottom: 2.5rem; }
+        footer code { font-family: 'IBM Plex Mono', monospace; }
+
+        @media (prefers-reduced-motion: reduce) {
+            h1 .neon .flicker { animation: none; }
         }
-
-        .status {
-            font-size: 0.72rem;
-            font-family: 'Space Mono', monospace;
-            color: var(--muted);
-            margin-top: 0.5rem;
-        }
-
-        .status.error { color: #f87171; }
-        .status.ok { color: #34d399; }
     </style>
 </head>
 <body>
-<div class="card">
-    <div class="header">
-        <div class="logo">🎵</div>
+
+<header class="topbar">
+    <div class="brand">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="24" height="24" rx="6" fill="#171110" stroke="#ff3d5a" stroke-width="1.5"/>
+            <path d="M10 16.5V9l7 2.2v5.3" stroke="#ffb02e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="8.2" cy="16.8" r="2.2" fill="#ff3d5a"/>
+            <circle cx="15.2" cy="14.6" r="2.2" fill="#ff3d5a"/>
+        </svg>
         <div>
-            <h1>TunaPresets</h1>
-            <div class="subtitle">URL Generator</div>
-        </div>
-        <div class="loading-badge" id="loadBadge">
-            <div class="dot"></div>
-            loading
+            <strong>Tuna presets</strong>
+            <span>Song overlays for OBS, via the Tuna plugin</span>
         </div>
     </div>
+    <a href="Styles/index.html?preview=1">Open a sample overlay</a>
+</header>
 
-    <div class="field">
-        <label>Style / Theme</label>
-        <select id="baseURL">
-            <option value="default">Default</option>
-            <option value="compact">Compact</option>
-            <option value="simple">Simple</option>
-        </select>
-    </div>
+<main class="layout">
+    <div class="panel">
+        <p class="kicker">Tuna &middot; OBS browser source</p>
+        <h1>Song overlay <span class="neon"><span class="flicker">bu</span>ilder</span></h1>
+        <p class="lede">Pick a look, set where it sits and how it moves, then paste the URL into OBS as a
+        Browser Source. Tuna has to be running with its web server on <code>localhost:1608</code> —
+        the preview below uses a demo track so you can style without music playing.</p>
 
-    <div class="grid-2">
-        <div class="field">
-            <label>Position</label>
-            <select id="position">
-                <option value="">Loading...</option>
+        <section class="block">
+            <h2><span class="num">01</span> Pick a look</h2>
+            <p class="sub">Eight themes. The first three are the old ones, kept as-is.</p>
+            <div class="themes" id="themeCards">
+                <div class="theme"><input type="radio" name="theme" id="th-default" value="default"><label for="th-default"><span class="dot" style="background:linear-gradient(135deg,#3a3a44,#17171c)"></span><span><b>Default</b><small>Blurred cover card. The safe choice.</small></span></label></div>
+                <div class="theme"><input type="radio" name="theme" id="th-compact" value="compact"><label for="th-compact"><span class="dot" style="background:linear-gradient(135deg,#2c2c34,#101014)"></span><span><b>Compact</b><small>Same idea, smaller footprint.</small></span></label></div>
+                <div class="theme"><input type="radio" name="theme" id="th-simple" value="simple"><label for="th-simple"><span class="dot" style="background:#1d1d22"></span><span><b>Simple</b><small>Flat, no blurred backdrop.</small></span></label></div>
+                <div class="theme"><input type="radio" name="theme" id="th-neon" value="neon" checked><label for="th-neon"><span class="dot" style="background:radial-gradient(circle at 35% 35%,#ff8ba0,#c21436 70%)"></span><span><b>Neon</b><small>Glass card with a glowing edge.</small></span></label></div>
+                <div class="theme"><input type="radio" name="theme" id="th-pill" value="pill"><label for="th-pill"><span class="dot" style="background:linear-gradient(135deg,#e8e4da,#8f887a);border-radius:999px"></span><span><b>Pill</b><small>Floating bar, tiny round art.</small></span></label></div>
+                <div class="theme"><input type="radio" name="theme" id="th-vinyl" value="vinyl"><label for="th-vinyl"><span class="dot" style="background:conic-gradient(#26262c,#0c0c0e,#26262c);border-radius:50%"></span><span><b>Vinyl</b><small>Round art that spins while playing.</small></span></label></div>
+                <div class="theme"><input type="radio" name="theme" id="th-lowerthird" value="lowerthird"><label for="th-lowerthird"><span class="dot" style="background:linear-gradient(90deg,#ff3d5a 0 22%,#17171c 22%)"></span><span><b>Lower third</b><small>Broadcast name bar for interviews.</small></span></label></div>
+                <div class="theme"><input type="radio" name="theme" id="th-mono" value="mono"><label for="th-mono"><span class="dot" style="background:#0d0d0d"></span><span><b>Mono</b><small>Text only, hides the chrome.</small></span></label></div>
+            </div>
+            <select id="baseURL" hidden>
+                <option value="default">Default</option>
+                <option value="compact">Compact</option>
+                <option value="simple">Simple</option>
+                <option value="neon" selected>Neon</option>
+                <option value="pill">Pill</option>
+                <option value="vinyl">Vinyl</option>
+                <option value="lowerthird">Lower Third</option>
+                <option value="mono">Mono</option>
             </select>
+        </section>
+
+        <section class="block">
+            <h2><span class="num">02</span> Placement and motion</h2>
+            <p class="sub">Where the card docks in the source, and how it swaps between songs.</p>
+            <div class="grid-2">
+                <div class="field">
+                    <span>Position</span>
+                    <select id="position"></select>
+                </div>
+                <div class="field">
+                    <span>Animation</span>
+                    <select id="animation"></select>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="field">
+                    <span>Transition length (ms)</span>
+                    <input type="number" id="duration" value="600" min="0" max="5000" step="50">
+                </div>
+                <div class="field">
+                    <span>Text alignment</span>
+                    <select id="align">
+                        <option value="">Theme default</option>
+                        <option value="left">Left</option>
+                        <option value="center">Center</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="block">
+            <h2><span class="num">03</span> Color and details</h2>
+            <p class="sub">Leave the background empty for transparency. 600ms feels snappy, 0 is instant.</p>
+            <div class="grid-2">
+                <div class="field">
+                    <span>Background</span>
+                    <div class="row-flex">
+                        <select id="bg-color" style="flex:1">
+                            <option value="">None (transparent)</option>
+                            <option value="dark">Dark</option>
+                            <option value="black">Black</option>
+                            <option value="blue">Blue</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="gray">Gray</option>
+                            <option value="purple">Purple</option>
+                            <option value="custom">Custom…</option>
+                        </select>
+                        <input type="color" id="bg-custom" value="#7c3aed" title="Custom background" style="display:none">
+                    </div>
+                </div>
+                <div class="field">
+                    <span>Accent</span>
+                    <div class="row-flex">
+                        <select id="accent-preset" style="flex:1">
+                            <option value="">Theme default</option>
+                            <option value="#ff3d5a">Neon red</option>
+                            <option value="#ffb02e">Amber</option>
+                            <option value="#7c3aed">Violet</option>
+                            <option value="#06b6d4">Cyan</option>
+                            <option value="#ec4899">Pink</option>
+                            <option value="#22c55e">Green</option>
+                            <option value="custom">Custom…</option>
+                        </select>
+                        <input type="color" id="accent-custom" value="#ff3d5a" title="Custom accent" style="display:none">
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <span>Extras</span>
+                <div class="checks">
+                    <label><input type="checkbox" id="opt-cover" checked> Cover art</label>
+                    <label><input type="checkbox" id="opt-album"> Album line</label>
+                    <label><input type="checkbox" id="opt-progress"> Progress bar</label>
+                    <label><input type="checkbox" id="opt-stay"> Keep last song when stopped</label>
+                    <label><input type="checkbox" id="opt-hidepaused"> Hide when paused</label>
+                </div>
+            </div>
+        </section>
+
+        <button class="btn-build" id="generateButton">Build the URL</button>
+        <div class="btn-row">
+            <button class="btn-ghost" id="previewButton">Refresh preview</button>
+            <button class="btn-ghost" id="openButton">Open overlay in new tab</button>
         </div>
-        <div class="field">
-            <label>Animation</label>
-            <select id="animation">
-                <option value="">Loading...</option>
-            </select>
+
+        <div class="output" id="outputBox">
+            <p>Your overlay URL — paste it into OBS as a Browser Source:</p>
+            <div class="output-box">
+                <input type="text" id="generatedURL" readonly>
+                <button class="btn-copy" id="copyButton">Copy</button>
+            </div>
         </div>
     </div>
 
-    <div class="grid-2">
-        <div class="field">
-            <label>Background Color</label>
-            <select id="bg-color">
-                <option value="">None</option>
-                <option value="blue">Blue</option>
-                <option value="red">Red</option>
-                <option value="gray">Gray</option>
-                <option value="purple">Purple</option>
-            </select>
+    <div class="side">
+        <div class="panel">
+            <h2>Preview <span class="live">DEMO TRACK</span></h2>
+            <iframe id="previewFrame" title="Overlay preview" scrolling="no"></iframe>
+            <p class="note">Updates as you change options. No Tuna needed here — the live overlay reads from <code>localhost:1608</code> instead.</p>
         </div>
-        <div class="field">
-            <label>Duration (ms)</label>
-            <input type="number" id="duration" value="1000" min="100" step="100">
-        </div>
-    </div>
-
-    <button class="btn-generate" id="generateButton">Generate URL</button>
-
-    <div class="output" id="outputBox">
-        <hr class="divider">
-        <label>Generated URL</label>
-        <div class="output-box">
-            <input type="text" id="generatedURL" readonly>
-            <button class="btn-copy" id="copyButton">Copy</button>
+        <div class="panel">
+            <h2>In OBS</h2>
+            <ol class="steps">
+                <li>Sources → <code>+</code> → <code>Browser</code>, create new.</li>
+                <li>Paste the URL. Set size to <code>500 × 200</code>, FPS <code>30</code>.</li>
+                <li>Tick <code>Shutdown source when not visible</code>.</li>
+                <li>Play something. If nothing shows, check Tuna's web server is on.</li>
+            </ol>
         </div>
     </div>
-</div>
+</main>
+
+<footer>Built for the Tuna plugin &middot; preview links carry <code>&amp;preview=1</code></footer>
 
 <script>
+// Hardcoded canonical lists (no fragile fetch-parsing needed).
+const THEMES = ['default', 'compact', 'simple', 'neon', 'pill', 'vinyl', 'lowerthird', 'mono'];
+
 const ANIMATION_GROUPS = {
     'Slide':   ['up', 'down', 'left', 'right'],
     'Fade':    ['fade', 'fadezoom', 'fadeup', 'fadedown', 'fadeleft', 'faderight'],
-    'Zoom':    ['zoomin', 'zoomout'],
+    'Zoom':    ['zoomin', 'zoomout', 'pop'],
+    'Style':   ['blur', 'wipe'],
     '3D':      ['flipx', 'flipy'],
     'Special': ['spin', 'glitch', 'cassette'],
 };
@@ -325,7 +460,8 @@ const ANIMATION_LABELS = {
     fade: 'Fade', fadezoom: 'Fade Zoom',
     fadeup: 'Fade Up', fadedown: 'Fade Down',
     fadeleft: 'Fade Left', faderight: 'Fade Right',
-    zoomin: 'Zoom In', zoomout: 'Zoom Out',
+    zoomin: 'Zoom In', zoomout: 'Zoom Out', pop: 'Pop',
+    blur: 'Blur', wipe: 'Wipe',
     flipx: 'Flip X', flipy: 'Flip Y',
     spin: 'Spin', glitch: 'Glitch', cassette: 'Cassette',
 };
@@ -336,122 +472,161 @@ const POSITION_LABELS = {
     topcenter: 'Top Center', bottomcenter: 'Bottom Center', center: 'Center',
 };
 
-const parseAnimationsFromSource = (src) => {
-    const found = [];
-    const regex = /case\s+'([^']+)'\s*:/g;
-    let match;
-    while ((match = regex.exec(src)) !== null) {
-        if (match[1] !== 'default') found.push(match[1]);
-    }
-    return found;
-};
+const $ = (id) => document.getElementById(id);
 
-const parsePositionsFromSource = (src) => {
-    const match = src.match(/const POSITION_CLASSES\s*=\s*\{([^}]+)\}/s);
-    if (!match) return [];
-    return [...match[1].matchAll(/(\w+)\s*:/g)].map(m => m[1]);
-};
-
-const populateAnimations = (keys) => {
-    const sel = document.getElementById('animation');
+const populateAnimations = () => {
+    const sel = $('animation');
     sel.innerHTML = '<option value="">Default (Scale)</option>';
-
-    const grouped = {};
-    const usedKeys = new Set();
-
     for (const [group, members] of Object.entries(ANIMATION_GROUPS)) {
-        const available = members.filter(k => keys.includes(k));
-        if (available.length) {
-            grouped[group] = available;
-            available.forEach(k => usedKeys.add(k));
-        }
-    }
-
-    const others = keys.filter(k => !usedKeys.has(k));
-    if (others.length) grouped['Other'] = others;
-
-    for (const [group, members] of Object.entries(grouped)) {
         const og = document.createElement('optgroup');
         og.label = group;
         members.forEach(k => {
             const opt = document.createElement('option');
             opt.value = k;
-            opt.textContent = ANIMATION_LABELS[k] ?? k.charAt(0).toUpperCase() + k.slice(1);
+            opt.textContent = ANIMATION_LABELS[k] ?? k;
             og.appendChild(opt);
         });
         sel.appendChild(og);
     }
+    sel.value = 'fadeup';
 };
 
-const populatePositions = (keys) => {
-    const sel = document.getElementById('position');
+const populatePositions = () => {
+    const sel = $('position');
     sel.innerHTML = '';
-    keys.forEach(k => {
+    Object.entries(POSITION_LABELS).forEach(([k, label]) => {
         const opt = document.createElement('option');
         opt.value = k;
-        opt.textContent = POSITION_LABELS[k] ?? k;
+        opt.textContent = label;
         sel.appendChild(opt);
     });
+    sel.value = 'bottomleft';
 };
 
-const setStatus = (text, type = '') => {
-    const badge = document.getElementById('loadBadge');
-    badge.innerHTML = text;
-    badge.style.color = type === 'error' ? '#f87171' : type === 'ok' ? '#34d399' : '';
-    badge.style.borderColor = type === 'error' ? 'rgba(248,113,113,0.3)' : type === 'ok' ? 'rgba(52,211,153,0.3)' : '';
-    badge.style.background = type === 'error' ? 'rgba(248,113,113,0.08)' : type === 'ok' ? 'rgba(52,211,153,0.08)' : '';
-};
+populateAnimations();
+populatePositions();
 
-Promise.all([
-    fetch('Styles/scripts/animations.js').then(r => r.text()),
-    fetch('Styles/scripts/styles.js').then(r => r.text()),
-]).then(([animSrc, stylesSrc]) => {
-    const animKeys = parseAnimationsFromSource(animSrc);
-    const posKeys  = parsePositionsFromSource(stylesSrc);
-
-    populateAnimations(animKeys);
-    populatePositions(posKeys);
-
-    setStatus('✓ synced', 'ok');
-    setTimeout(() => {
-        document.getElementById('loadBadge').style.display = 'none';
-    }, 2000);
-}).catch(err => {
-    console.warn('Could not fetch JS files, using defaults.', err);
-    populateAnimations(Object.values(ANIMATION_GROUPS).flat());
-    populatePositions(Object.keys(POSITION_LABELS));
-    setStatus('offline · defaults', 'error');
-});
-
-document.getElementById('generateButton').addEventListener('click', () => {
-    const params = new URLSearchParams({
-        theme:     document.getElementById('baseURL').value,
-        position:  document.getElementById('position').value,
-        animation: document.getElementById('animation').value,
-        duration:  document.getElementById('duration').value,
-        bgcolor:   document.getElementById('bg-color').value,
+// Theme cards are the visible picker; the hidden select stays the source of truth.
+document.querySelectorAll('input[name="theme"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        if (radio.checked) {
+            $('baseURL').value = radio.value;
+            refreshPreview();
+        }
     });
-
-
-    for (const [k, v] of [...params.entries()]) {
-        if (!v) params.delete(k);
-    }
-
-    const url = `https://maikatura.github.io/TunaPresets/Styles/index.html?${params}`;
-    document.getElementById('generatedURL').value = url;
-    document.getElementById('outputBox').style.display = 'block';
 });
 
-document.getElementById('copyButton').addEventListener('click', () => {
-    const url = document.getElementById('generatedURL').value;
+// Best-effort sync: if the overlay scripts expose canonical lists, adopt them
+// (keeps generator in sync when new animations/positions are added).
+Promise.allSettled([
+    fetch('Styles/scripts/animations.js').then(r => r.ok ? r.text() : ''),
+    fetch('Styles/scripts/styles.js').then(r => r.ok ? r.text() : ''),
+]).then(([animRes, styleRes]) => {
+    try {
+        const animSrc = animRes.value || '';
+        const m = animSrc.match(/TUNA_ANIMATIONS\s*=\s*\[([\s\S]*?)\]/);
+        if (m) {
+            const keys = [...m[1].matchAll(/'([^']+)'/g)].map(x => x[1]);
+            if (keys.length) {
+                // Rebuild groups, putting unknown keys under "Other".
+                const known = new Set(Object.values(ANIMATION_GROUPS).flat());
+                const others = keys.filter(k => !known.has(k));
+                const sel = $('animation');
+                const cur = sel.value;
+                populateAnimations();
+                if (others.length) {
+                    const og = document.createElement('optgroup');
+                    og.label = 'Other';
+                    others.forEach(k => {
+                        const opt = document.createElement('option');
+                        opt.value = k;
+                        opt.textContent = ANIMATION_LABELS[k] ?? k;
+                        og.appendChild(opt);
+                    });
+                    sel.appendChild(og);
+                }
+                sel.value = cur;
+            }
+        }
+    } catch (e) { console.warn('animation sync failed', e); }
+}).catch(() => {});
+
+const toggleCustom = (selectId, pickerId) => {
+    const show = $(selectId).value === 'custom';
+    $(pickerId).style.display = show ? '' : 'none';
+};
+$('bg-color').addEventListener('change', () => toggleCustom('bg-color', 'bg-custom'));
+$('accent-preset').addEventListener('change', () => toggleCustom('accent-preset', 'accent-custom'));
+
+const buildParams = (forPreview) => {
+    const params = new URLSearchParams();
+    const theme = $('baseURL').value;
+    const position = $('position').value;
+    const animation = $('animation').value;
+    const duration = Math.min(Math.max(parseInt($('duration').value, 10) || 0, 0), 5000);
+    let bgcolor = $('bg-color').value;
+    if (bgcolor === 'custom') bgcolor = $('bg-custom').value;
+    let accent = $('accent-preset').value;
+    if (accent === 'custom') accent = $('accent-custom').value;
+    const align = $('align').value;
+
+    if (theme) params.set('theme', theme);
+    if (position) params.set('position', position);
+    if (animation) params.set('animation', animation);
+    params.set('duration', String(duration));
+    if (bgcolor) params.set('bgcolor', bgcolor);
+    if (accent) params.set('accent', accent);
+    if (align) params.set('align', align);
+    if (!$('opt-cover').checked) params.set('cover', '0');
+    if ($('opt-album').checked) params.set('album', '1');
+    if ($('opt-progress').checked) params.set('progress', '1');
+    if ($('opt-stay').checked) params.set('stay', '1');
+    if ($('opt-hidepaused').checked) params.set('hidepaused', '1');
+    if (forPreview) params.set('preview', '1');
+    return params;
+};
+
+const overlayPath = () => {
+    // Derive from wherever this builder is hosted, so forks and local
+    // copies generate working URLs. When hosted at
+    // maikatura.github.io/TunaPresets this naturally yields
+    // https://maikatura.github.io/TunaPresets/Styles/index.html.
+    return new URL('Styles/index.html', location.href).toString();
+};
+
+const refreshPreview = () => {
+    $('previewFrame').src = overlayPath() + '?' + buildParams(true).toString();
+};
+
+$('generateButton').addEventListener('click', () => {
+    const url = overlayPath() + '?' + buildParams(false).toString();
+    $('generatedURL').value = url;
+    $('outputBox').style.display = 'block';
+    refreshPreview();
+});
+
+$('previewButton').addEventListener('click', refreshPreview);
+
+$('openButton').addEventListener('click', () => {
+    const base = $('generatedURL').value || (overlayPath() + '?' + buildParams(false).toString());
+    window.open(base + (base.includes('?') ? '&' : '?') + 'preview=1', '_blank');
+});
+
+document.querySelectorAll('select, input').forEach(el => {
+    el.addEventListener('change', refreshPreview);
+});
+
+// Initial preview on load.
+refreshPreview();
+
+$('copyButton').addEventListener('click', () => {
+    const url = $('generatedURL').value;
+    if (!url) return;
     navigator.clipboard.writeText(url).then(() => {
-        const btn = document.getElementById('copyButton');
+        const btn = $('copyButton');
         btn.textContent = 'Copied!';
         btn.classList.add('copied');
-        setTimeout(() => {
-            btn.textContent = 'Copy';
-            btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
     });
 });
 </script>

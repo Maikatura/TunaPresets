@@ -30,7 +30,7 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.2); /* Add border for hard edges */
+    border: 1px solid rgba(255, 255, 255, 0.16); /* Add border for hard edges */
     box-sizing: border-box; /* Include border in element size */
     z-index: -1;
     overflow: hidden; /* Hide the blur overflow */
@@ -64,7 +64,7 @@ body {
 }
 
 .details {
-    text-align: left;
+    min-width: 0;
 }
 
 h1 {

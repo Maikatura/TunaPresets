@@ -1,0 +1,43 @@
+/* mono.css — ultra-minimal text bar, no cover chrome. Pairs well with ?cover=0. */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+.now-playing {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--np-bg, rgba(0, 0, 0, 0.62));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 3px solid var(--np-accent, #7c3aed);
+  border-radius: 8px;
+  padding: 8px 14px;
+  gap: 10px;
+  max-width: 480px;
+  box-shadow: none;
+}
+
+.cover-background, .blur-wrapper { display: none; }
+
+.cover-container {
+  flex-basis: 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+}
+
+.details h1 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.details h1::before {
+  content: '♫ ';
+  color: var(--np-accent, #7c3aed);
+  opacity: 0.85;
+}
+
+.details p {
+  font-size: 11.5px;
+  color: #a8a8b8;
+}
+
+#album { display: none !important; }
+.progress { height: 2px; }

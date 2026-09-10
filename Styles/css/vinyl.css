@@ -1,0 +1,86 @@
+/* vinyl.css — spinning record cover + track info. */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+
+.now-playing {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--np-bg, rgba(12, 12, 16, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 12px 18px 12px 12px;
+  gap: 14px;
+  max-width: 440px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 14px 44px rgba(0, 0, 0, 0.55);
+}
+
+.cover-background { opacity: 0.2; }
+.blur-wrapper {
+  backdrop-filter: blur(8px) brightness(0.45);
+  -webkit-backdrop-filter: blur(8px) brightness(0.45);
+}
+
+.cover-container {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  position: relative;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.5), 0 0 24px rgba(0, 0, 0, 0.6);
+  background: #0b0b0e;
+}
+
+/* faint record grooves over the artwork */
+.cover-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle at 50% 50%, transparent 0 2px, rgba(255, 255, 255, 0.05) 2px 3px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* vinyl hole */
+.cover-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--np-accent, #7c3aed);
+  border: 3px solid #0b0b0e;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cover-container img {
+  border-radius: 50%;
+  animation: vinyl-spin 14s linear infinite;
+}
+
+.now-playing.is-paused .cover-container img { animation-play-state: paused; }
+
+@keyframes vinyl-spin {
+  to { transform: rotate(360deg); }
+}
+
+.details::before {
+  content: 'NOW SPINNING';
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--np-accent, #a78bfa);
+  margin-bottom: 3px;
+}
+
+.details h1 { font-size: 16.5px; font-weight: 700; }
+.details p { font-size: 12.5px; color: #c4c4d2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-container img { animation: none; }
+}
